@@ -1,0 +1,6 @@
+framework module Pods_metal_priceTests {
+  umbrella header "Pods-metal-priceTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
