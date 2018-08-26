@@ -7,6 +7,7 @@ target 'metal-price' do
 
   pod 'Alamofire'
   pod 'Charts'
+  pod 'SVProgressHUD'
 
   # Pods for metal-price
 

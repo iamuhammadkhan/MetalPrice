@@ -9,11 +9,14 @@
 import UIKit
 import Charts
 
-class ChartsVC: UIViewController {
+class ChartsVC: UIViewController, ChartViewDelegate {
 
-    var numbers: [Double] = [30, 20, 30, 40, 25, 50, 35, 60, 45, 70]
+    var newNums: [Double] = [35, 40, 50, 55, 45, 25, 15, 20, 30, 40, 35, 50]
+    var numbers: [Double] = [30, 20, 15, 40, 25, 50, 35, 60, 45, 70, 15, 10]
+    
     var lineChartEntry = [ChartDataEntry]()
     var line: LineChartDataSet!
+    var currentMetalName = "Gold"
     let data = LineChartData()
     
     var segmentControl: UISegmentedControl = {
@@ -21,7 +24,6 @@ class ChartsVC: UIViewController {
         sc.selectedSegmentIndex = 0
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.tintColor = #colorLiteral(red: 0.2117647059, green: 0.6431372549, blue: 0.9882352941, alpha: 1)
-        sc.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         return sc
     }()
     
@@ -127,7 +129,7 @@ class ChartsVC: UIViewController {
         label.font = UIFont(name: "Kailasa", size: 15)
         label.textAlignment = .right
         label.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        label.text = "$1189.50"
+        label.text = "$1,189.50"
         return label
     }()
     
@@ -137,7 +139,7 @@ class ChartsVC: UIViewController {
         label.font = UIFont(name: "Kailasa", size: 15)
         label.textAlignment = .right
         label.textColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        label.text = "$1190.50"
+        label.text = "$1,190.50"
         return label
     }()
     
@@ -157,31 +159,44 @@ class ChartsVC: UIViewController {
         setupViews()
     }
     
+    fileprivate func getChartData() {
+        APIService.shared.getHistoricalMetalQuotes(withSymbol: "XAU", andCurrency: "USD", andWithStartDate: "8/1/2018", andWithEndDate: "8/24/2018") { (metals, error) in
+            if let err = error {
+                print("Error : ", err)
+            } else {
+                print("Wow : ", metals!)
+            }
+        }
+    }
+    
     private func setupViews() {
+        
+        //getChartData()
         
         view.addSubview(segmentControl)
         segmentControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 85).isActive = true
         segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
         segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
-        segmentControl.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        segmentControl.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        segmentControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         
         view.addSubview(mainStackView)
         mainStackView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 12).isActive = true
         mainStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12).isActive = true
         mainStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12).isActive = true
-        
+
         mainStackView.addArrangedSubview(titleStackView)
         titleStackView.addArrangedSubview(metalNameLbl)
         titleStackView.addArrangedSubview(metalBidPriceLbl)
         titleStackView.addArrangedSubview(metalAskPriceLbl)
         titleStackView.addArrangedSubview(metalPriceChangeLbl)
-        
+
         mainStackView.addArrangedSubview(detailStackView)
         detailStackView.addArrangedSubview(metalName)
         detailStackView.addArrangedSubview(metalBidPrice)
         detailStackView.addArrangedSubview(metalAskPrice)
         detailStackView.addArrangedSubview(metalPriceChange)
-        
+
         mainStackView.addArrangedSubview(lastUpdateLable)
         
         view.addSubview(chartView)
@@ -189,23 +204,51 @@ class ChartsVC: UIViewController {
         chartView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
         chartView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
         chartView.topAnchor.constraint(equalTo: mainStackView.bottomAnchor, constant: 12).isActive = true
+        chartView.delegate = self
         
-        updateChart()
+        let xAxis = chartView.xAxis
+        xAxis.labelPosition = .bottom
+        xAxis.labelCount = 12
+        
+        xAxis.drawLabelsEnabled = true
+        xAxis.drawLimitLinesBehindDataEnabled = true
+        xAxis.avoidFirstLastClippingEnabled = true
+        
+        updateChart(withMetalName: currentMetalName, andWithData: numbers)
     }
     
-    private func updateChart() {
-        for i in numbers {
-            let value = ChartDataEntry(x: i, y: i)
+    private func updateChart(withMetalName metal: String, andWithData dataSet: [Double]) {
+        for i in 0..<dataSet.count {
+            let value = ChartDataEntry(x: Double(i), y: newNums[i])
             lineChartEntry.append(value)
         }
         
-        line = LineChartDataSet(values: lineChartEntry, label: "Gold")
-        line.colors = [NSUIColor.blue]
-        
+        line = LineChartDataSet(values: lineChartEntry, label: metal)
+        line.colors = [ #colorLiteral(red: 0.2117647059, green: 0.6431372549, blue: 0.9882352941, alpha: 1) ]
+        line.mode = .cubicBezier
         data.addDataSet(line)
         
         chartView.data = data
         chartView.chartDescription?.text = nil
+        
+        chartView.notifyDataSetChanged()
     }
 
+    @objc private func segmentChanged(_ sender: UISegmentedControl) {
+
+        switch sender.selectedSegmentIndex {
+        case 1:
+            currentMetalName = "Silver"
+            updateChart(withMetalName: currentMetalName, andWithData: numbers)
+        case 2:
+            currentMetalName = "Platinum"
+            updateChart(withMetalName: currentMetalName, andWithData: numbers)
+        case 3:
+            currentMetalName = "Palladium"
+            updateChart(withMetalName: currentMetalName, andWithData: numbers)
+        default:
+            currentMetalName = "Gold"
+            updateChart(withMetalName: currentMetalName, andWithData: numbers)
+        }
+    }
 }

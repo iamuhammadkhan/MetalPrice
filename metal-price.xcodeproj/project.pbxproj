@@ -11,6 +11,8 @@
 		3E5A4698212EE25700CA9BF4 /* ChartsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A4697212EE25700CA9BF4 /* ChartsVC.swift */; };
 		3E5A469A212FE6B800CA9BF4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A4699212FE6B800CA9BF4 /* Constants.swift */; };
 		3E5A469C212FECB600CA9BF4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A469B212FECB600CA9BF4 /* APIService.swift */; };
+		3E5A469E213010CE00CA9BF4 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A469D213010CE00CA9BF4 /* DoubleExtension.swift */; };
+		3E5A46A021306ED900CA9BF4 /* MetalHistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5A469F21306ED900CA9BF4 /* MetalHistoryModel.swift */; };
 		3ECE0343212E7E0D00707207 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECE0342212E7E0D00707207 /* AppDelegate.swift */; };
 		3ECE0345212E7E0D00707207 /* PricesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECE0344212E7E0D00707207 /* PricesVC.swift */; };
 		3ECE0348212E7E0D00707207 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ECE0346212E7E0D00707207 /* Main.storyboard */; };
@@ -52,6 +54,8 @@
 		3E5A4697212EE25700CA9BF4 /* ChartsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsVC.swift; sourceTree = "<group>"; };
 		3E5A4699212FE6B800CA9BF4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3E5A469B212FECB600CA9BF4 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		3E5A469D213010CE00CA9BF4 /* DoubleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
+		3E5A469F21306ED900CA9BF4 /* MetalHistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalHistoryModel.swift; sourceTree = "<group>"; };
 		3ECE033F212E7E0D00707207 /* metal-price.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "metal-price.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ECE0342212E7E0D00707207 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3ECE0344212E7E0D00707207 /* PricesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesVC.swift; sourceTree = "<group>"; };
@@ -149,8 +153,8 @@
 			isa = PBXGroup;
 			children = (
 				3ECE0376212E889A00707207 /* Model */,
-				3ECE0377212E88A200707207 /* ViewModel */,
 				3ECE0378212E88AE00707207 /* View */,
+				3ECE0377212E88A200707207 /* ViewModel */,
 				3ECE0373212E87E200707207 /* Supporting Files */,
 			);
 			path = "metal-price";
@@ -190,8 +194,9 @@
 		3ECE0376212E889A00707207 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3ECE0379212E971000707207 /* MetalModel.swift */,
 				3E5A4699212FE6B800CA9BF4 /* Constants.swift */,
+				3ECE0379212E971000707207 /* MetalModel.swift */,
+				3E5A469F21306ED900CA9BF4 /* MetalHistoryModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -228,6 +233,7 @@
 				3ECE0344212E7E0D00707207 /* PricesVC.swift */,
 				3EEDE764212E9D490058ABC1 /* PricesCell.swift */,
 				3EEDE768212EA3950058ABC1 /* TableViewCellExtension.swift */,
+				3E5A469D213010CE00CA9BF4 /* DoubleExtension.swift */,
 			);
 			path = "Spot Prices View";
 			sourceTree = "<group>";
@@ -409,6 +415,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-metal-price/Pods-metal-price-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Charts/Charts.framework",
+				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -416,6 +423,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Charts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -476,10 +484,12 @@
 				3ECE0345212E7E0D00707207 /* PricesVC.swift in Sources */,
 				3EEDE765212E9D490058ABC1 /* PricesCell.swift in Sources */,
 				3ECE034B212E7E0D00707207 /* metal_price.xcdatamodeld in Sources */,
+				3E5A469E213010CE00CA9BF4 /* DoubleExtension.swift in Sources */,
 				3ECE037A212E971000707207 /* MetalModel.swift in Sources */,
 				3ECE0343212E7E0D00707207 /* AppDelegate.swift in Sources */,
 				3ECE0375212E883A00707207 /* MainVC.swift in Sources */,
 				3E5A469C212FECB600CA9BF4 /* APIService.swift in Sources */,
+				3E5A46A021306ED900CA9BF4 /* MetalHistoryModel.swift in Sources */,
 				3EEDE769212EA3950058ABC1 /* TableViewCellExtension.swift in Sources */,
 				3E5A4698212EE25700CA9BF4 /* ChartsVC.swift in Sources */,
 				3E5A469A212FE6B800CA9BF4 /* Constants.swift in Sources */,

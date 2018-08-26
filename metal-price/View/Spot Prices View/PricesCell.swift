@@ -13,11 +13,11 @@ class PricesCell: UITableViewCell {
     let cardView: UIView = {
         let cv = UIView()
         cv.backgroundColor = .white
-        //cv.layer.cornerRadius = 8
+        cv.layer.cornerRadius = 5
         cv.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0.1176470588, alpha: 1)
         cv.layer.shadowRadius = 4
         cv.layer.shadowOpacity = 0.3
-        cv.layer.shadowOffset = CGSize(width: 2, height: 0)
+        cv.layer.shadowOffset = CGSize(width: -2, height: 0.5)
         cv.translatesAutoresizingMaskIntoConstraints = false
         return cv
     }()
@@ -27,17 +27,17 @@ class PricesCell: UITableViewCell {
         sv.axis = .horizontal
         sv.distribution = .fill
         sv.alignment = .fill
-        sv.spacing = 10
+        sv.spacing = 20
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
     
     let innerStackView: UIStackView = {
         let sv = UIStackView()
-        sv.axis = .vertical
+        sv.axis = .horizontal
         sv.distribution = .fill
         sv.alignment = .fill
-        sv.spacing = 10
+        sv.spacing = 5
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
@@ -45,7 +45,7 @@ class PricesCell: UITableViewCell {
     let metalNameLbl: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Kailasa", size: 17)
+        label.font = UIFont(name: "Kailasa", size: 16)
         label.textAlignment = .left
         label.textColor = #colorLiteral(red: 0, green: 0, blue: 0.1176470588, alpha: 1)
         label.text = ""
@@ -55,7 +55,7 @@ class PricesCell: UITableViewCell {
     let metalPriceLbl: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Kailasa", size: 17)
+        label.font = UIFont(name: "Kailasa", size: 16)
         label.textAlignment = .right
         label.textColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
         label.text = ""
@@ -65,8 +65,8 @@ class PricesCell: UITableViewCell {
     let metalPriceChangeLbl: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name: "Kailasa", size: 17)
-        label.textAlignment = .center
+        label.font = UIFont(name: "Kailasa", size: 16)
+        label.textAlignment = .right
         label.textColor = #colorLiteral(red: 0.370555222, green: 0.3705646992, blue: 0.3705595732, alpha: 1)
         label.text = ""
         return label
@@ -107,43 +107,36 @@ class PricesCell: UITableViewCell {
         cardView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 12).isActive = true
         cardView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -12).isActive = true
         
-        cardView.addSubview(metalNameLbl)
-        metalNameLbl.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16).isActive = true
-        metalNameLbl.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
-        metalNameLbl.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16).isActive = true
-        metalNameLbl.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        cardView.addSubview(mainStackView)
+        mainStackView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16).isActive = true
+        mainStackView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 16).isActive = true
+        mainStackView.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16).isActive = true
+        mainStackView.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16).isActive = true
         
-        cardView.addSubview(metalPriceChangeLbl)
-        metalPriceChangeLbl.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16).isActive = true
-        metalPriceChangeLbl.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16).isActive = true
-        metalPriceChangeLbl.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -16).isActive = true
-        
-        cardView.addSubview(indicatorButton)
         indicatorButton.heightAnchor.constraint(equalToConstant: 15).isActive = true
         indicatorButton.widthAnchor.constraint(equalToConstant: 15).isActive = true
-        indicatorButton.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16).isActive = true
-        indicatorButton.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16).isActive = true
-        indicatorButton.trailingAnchor.constraint(equalTo: metalPriceChangeLbl.leadingAnchor, constant: -5).isActive = true
         
-        cardView.addSubview(metalPriceLbl)
-        metalPriceLbl.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 16).isActive = true
-        metalPriceLbl.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -16).isActive = true
-        metalPriceLbl.leadingAnchor.constraint(equalTo: metalNameLbl.trailingAnchor, constant: 8).isActive = true
+        innerStackView.addArrangedSubview(metalPriceLbl)
+        innerStackView.addArrangedSubview(indicatorButton)
+        
+        mainStackView.addArrangedSubview(metalNameLbl)
+        mainStackView.addArrangedSubview(innerStackView)
+        mainStackView.addArrangedSubview(metalPriceChangeLbl)
     }
     
-    func populate(with metal: Metal) {
-        
-        metalNameLbl.text = metal.Name.capitalized
-        metalPriceLbl.text = "\(metal.Currency)\(metal.Ask)"
-        
+//    func populate(with metal: Metal) {
+//        
+//        metalNameLbl.text = metal.Name.capitalized
+//        metalPriceLbl.text = "$\(metal.Ask.withCommas())"
+//        
 //        if metal.askIndicator == .down {
 //            indicatorButton.setImage(#imageLiteral(resourceName: "down"), for: .normal)
 //            metalPriceChangeLbl.text = "(\(metal.priceChange))"
 //            metalPriceChangeLbl.textColor = #colorLiteral(red: 0.9994671941, green: 0.001003724639, blue: 0.27533409, alpha: 1)
 //        } else {
-            indicatorButton.setImage(#imageLiteral(resourceName: "up"), for: .normal)
-            metalPriceChangeLbl.text = "\(metal.Change)"
-            metalPriceChangeLbl.textColor = #colorLiteral(red: 0.1985552907, green: 0.7826311588, blue: 0.3914662302, alpha: 1)
+//            indicatorButton.setImage(#imageLiteral(resourceName: "up"), for: .normal)
+//            metalPriceChangeLbl.text = "$\(metal.Change.withCommas())"
+//            metalPriceChangeLbl.textColor = #colorLiteral(red: 0.1985552907, green: 0.7826311588, blue: 0.3914662302, alpha: 1)
 //        }
-    }
+//    }
 }
